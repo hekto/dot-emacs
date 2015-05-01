@@ -220,6 +220,10 @@
 (when is-mac (require 'mac))
 (when is-linux (require 'linux))
 
+;; Set up appearance early
+(require 'appearance)
+(menu-bar-mode t)
+
 ;; Setup key bindings
 (require 'key-bindings)
 
@@ -266,10 +270,6 @@
 
 ;; for sr-speedbar:
 (defun ad-advised-definition-p (definition) "Return non-nil if DEFINITION was generated from advice information." (if (or (ad-lambda-p definition) (macrop definition) (ad-compiled-p definition)) (let ((docstring (ad-docstring definition))) (and (stringp docstring) (get-text-property 0 ‘dynamic-docstring-function docstring)))))
-
-;; Set up appearance early
-(require 'appearance)
-(menu-bar-mode -1)
 
 (when window-system
   ;;(global-nlinum-mode 1)

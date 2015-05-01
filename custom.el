@@ -18,7 +18,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#2A211C" :foreground "#BDAE9D" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :family "Monospace"))))
  '(diff-hl-change ((t (:background "#443322" :foreground "#999933"))) t)
  '(diff-hl-delete ((t (:inherit diff-removed :background "#332222" :foreground "#993333"))) t)
  '(diff-hl-insert ((t (:inherit diff-added :background "#223322" :foreground "#339933"))) t)

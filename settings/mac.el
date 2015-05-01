@@ -11,4 +11,8 @@
 ;;   )
 ;; )
 
+(when window-system
+  (set-face-attribute 'default nil :font "-apple-Monaco-medium-normal-normal-*-14-*-*-*-m-0-iso10646-1"))
+
+
 (provide 'mac)
