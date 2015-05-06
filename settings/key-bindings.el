@@ -21,6 +21,7 @@
 (global-set-key [?\C-c ?\C-i] 'indent-region)
 (global-set-key [?\C-c ?\C-g] 'goto-line)
 (global-set-key (kbd "C-c g") 'goto-line)
+(global-set-key (kbd "C-c i") 'indent-buffer)
 
 ;;(global-set-key (kbd "C-x f") 'recentf-ido-find-file)
 (global-set-key (kbd "C-x f") 'find-file-in-project)
@@ -32,6 +33,11 @@
 (global-set-key (kbd "M-\"") 'insert-pair)
 (global-set-key (kbd "M-'") 'insert-pair)
 (global-set-key (kbd "M-]") 'delete-pair)
+
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+(global-set-key (kbd "C-s-0") (lambda () (interactive) (text-scale-set 0)))
+
 
 (defun align-= (p1 p2)
   "Align lines by ="
@@ -131,19 +137,24 @@
 
 (defun fix-error ()
   (interactive)
-  (if (looking-at ";")
-      (delete-char 1)
-    (save-excursion
-      (right-char)
-      (cond ((looking-at "(") (right-char) (insert " "))
-	    ((looking-at "\\[") (right-char) (insert " "))
-	    ((looking-at "=") (insert "="))
-	    ((looking-at ")") (insert " "))
-	    ((looking-at "]") (insert " ")))))
+
+  (let ((errors (flycheck-overlay-errors-at (point))))
+
+    (dolist (error errors)
+      (let ((msg (elt error 8)))
+        (cond ((string= msg "space-in-parens")
+               (cond ((looking-at "(") (right-char) (insert " "))
+                     ((looking-at ")") (insert " "))))
+              ((string= msg "space-in-brackets")
+               (cond ((looking-at "\\[") (right-char) (insert " "))
+                     ((looking-at "]") (insert " "))))
+              ((string= msg "eqeqeq")
+               (cond ((looking-at "=") (insert "="))
+                     ((looking-at "!") (right-char) (insert "="))))))))
 
 
 
-  (flycheck-buffer)
+  ;;(flycheck-buffer)
   (flycheck-next-error)
 
   (set-temporary-overlay-map
@@ -165,18 +176,18 @@
   "Execute BODY and repeat while the user presses the last key."
   (declare (indent 0))
   `(let* ((repeat-key (and (> (length (this-single-command-keys)) 1)
-			   last-input-event))
-	  (repeat-key-str (format-kbd-macro (vector repeat-key) nil)))
+                           last-input-event))
+          (repeat-key-str (format-kbd-macro (vector repeat-key) nil)))
      ,@body
      (while repeat-key
 ;       (message "(Type %s to repeat)" repeat-key-str)
        (let ((event (read-event)))
-	 (clear-this-command-keys t)
-	 (if (equal event repeat-key)
-	     (progn ,@body
-		    (setq last-input-event nil))
-	   (setq repeat-key nil)
-	   (push last-input-event unread-command-events))))))
+         (clear-this-command-keys t)
+         (if (equal event repeat-key)
+             (progn ,@body
+                    (setq last-input-event nil))
+           (setq repeat-key nil)
+           (push last-input-event unread-command-events))))))
 ;; ------------------------------
 
 (defun repeat-next-error () (interactive) (with-easy-repeat (next-error)))

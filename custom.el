@@ -4,8 +4,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ac-ignores (quote ("/" "//" ";")))
- '(ansi-color-names-vector ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#ad7fa8" "#8cc4ff" "#eeeeec"])
- '(custom-safe-themes (quote ("08c744b837a78ad03b8e411916daea03c189b7f04d861bbb48632ca2f060da4d" "3fe1a1e20cd0eda22ea1c5c94f17e7a90a7bc7e6e350854f8409fcfe2ea2e74b" "e495d7879e9e62bef677f16278007b1e8f46b0335eced4e1a91f0a1b89c7ffab" "bd484258258801711bc85d8995d68f9a3c17112d8b48523615fd4ddb2c58cf79" default)))
+ '(ansi-color-names-vector
+   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#ad7fa8" "#8cc4ff" "#eeeeec"])
+ '(custom-safe-themes
+   (quote
+    ("08c744b837a78ad03b8e411916daea03c189b7f04d861bbb48632ca2f060da4d" "3fe1a1e20cd0eda22ea1c5c94f17e7a90a7bc7e6e350854f8409fcfe2ea2e74b" "e495d7879e9e62bef677f16278007b1e8f46b0335eced4e1a91f0a1b89c7ffab" "bd484258258801711bc85d8995d68f9a3c17112d8b48523615fd4ddb2c58cf79" default)))
  '(diff-hl-draw-borders nil)
  '(flycheck-checker-error-threshold nil)
  '(fringe-mode (quote (10 . 0)) nil (fringe))
@@ -21,6 +24,8 @@
  '(diff-hl-change ((t (:background "#443322" :foreground "#999933"))) t)
  '(diff-hl-delete ((t (:inherit diff-removed :background "#332222" :foreground "#993333"))) t)
  '(diff-hl-insert ((t (:inherit diff-added :background "#223322" :foreground "#339933"))) t)
+ '(flycheck-error ((t (:background "black"))))
+ '(flycheck-warning ((t (:underline "#ffcc00"))))
  '(ido-subdir ((t (:foreground "orange"))))
  '(js2-function-param ((t (:foreground "orange"))))
  '(mode-line ((t (:background "#d3d7cf" :foreground "#2e3436" :box (:line-width -1 :style released-button)))))

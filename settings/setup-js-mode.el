@@ -1,19 +1,21 @@
 (message "Setting up js²")
+(require 's)
+(require 'js)
 (require 'js2-mode)
 ;;(require 'js2-indent)
 (defun js2-mode-inside-comment-or-string ()
   "Return non-nil if inside a comment or string."
   (or
    (let ((comment-start
-	  (save-excursion
-	    (goto-char (point-at-bol))
-	    (if (re-search-forward "//" (point-at-eol) t)
-		(match-beginning 0)))))
+          (save-excursion
+            (goto-char (point-at-bol))
+            (if (re-search-forward "//" (point-at-eol) t)
+                (match-beginning 0)))))
      (and comment-start
-	  (<= comment-start (point))))
+          (<= comment-start (point))))
    (let ((parse-state (syntax-ppss)))
      (or (nth 3 parse-state)
-	 (nth 4 parse-state)))))
+         (nth 4 parse-state)))))
 
 
 (setq-default js2-idle-timer-delay 0.01)
@@ -48,6 +50,9 @@
 (add-hook 'js2-mode-hook (lambda() (setq mode-name "js²")))
 (add-hook 'js-mode-hook (lambda() (setq mode-name "js")))
 (add-hook 'js-mode-hook 'js2-minor-mode)
+
+(add-hook 'js2-mode-hook (lambda() (set (make-local-variable 'indent-line-function) 'js-indent-line)))
+
 
 ;;(setq-default flycheck-checker 'javascript-jscs)
 
@@ -86,39 +91,39 @@
   (save-excursion
     (end-of-line)
     (if (looking-back "{};?")
-	(progn (search-backward "}")
-	       (newline)
-	       (indent-region (line-beginning-position) (line-end-position)))
+        (progn (search-backward "}")
+               (newline)
+               (indent-region (line-beginning-position) (line-end-position)))
 
       (let ((str (nth 1 (syntax-ppss))))
-	(when str
-	  (goto-char str)
-	  (forward-list)
-	  (forward-line)
-	  (if (looking-at ".*{\$")
-	      (progn (end-of-line)
-		     (backward-char)
-		     (let ((lstart (line-number-at-pos (point))))
-		       (forward-list)
-		       (let ((lend (line-number-at-pos (point))))
-			 (backward-list)
-			 (transpose-lines (+ 1 (- lend lstart)))
-			 (indent-region str (point)))))
-	    ;; (if (looking-at ".*([^)]*\$")
-	    ;;     (progn)
+        (when str
+          (goto-char str)
+          (forward-list)
+          (forward-line)
+          (if (looking-at ".*{\$")
+              (progn (end-of-line)
+                     (backward-char)
+                     (let ((lstart (line-number-at-pos (point))))
+                       (forward-list)
+                       (let ((lend (line-number-at-pos (point))))
+                         (backward-list)
+                         (transpose-lines (+ 1 (- lend lstart)))
+                         (indent-region str (point)))))
+            ;; (if (looking-at ".*([^)]*\$")
+            ;;     (progn)
 
-	    (if (looking-at ".*\\[\$")
-		(progn (let ((beg (line-beginning-position) ))
-			 (forward-list)
-			 (end-of-line)
-			 (let ((lines (delete-and-extract-region beg (+ 1 (point)))))
-			   (previous-line)
-			   (insert lines))
-			 ))
-	      (when (looking-at ".*)\$")
-		(transpose-lines 1))
-	      (transpose-lines 1))
-	    (indent-region str (point))))))))
+            (if (looking-at ".*\\[\$")
+                (progn (let ((beg (line-beginning-position) ))
+                         (forward-list)
+                         (end-of-line)
+                         (let ((lines (delete-and-extract-region beg (+ 1 (point)))))
+                           (previous-line)
+                           (insert lines))
+                         ))
+              (when (looking-at ".*)\$")
+                (transpose-lines 1))
+              (transpose-lines 1))
+            (indent-region str (point))))))))
 
 (defun mm-barf-line ()
   (interactive)
@@ -126,34 +131,34 @@
     (end-of-line)
     (let ((str (nth 1 (syntax-ppss))) (open-line (line-number-at-pos (point))))
       (when str
-	(goto-char str)
-	(forward-list)
+        (goto-char str)
+        (forward-list)
 
-	(if (= (+ 1 open-line) (line-number-at-pos (point)))
-	    (progn (beginning-of-line) (delete-backward-char 1))
-	  (previous-line)
-	  (end-of-line)
+        (if (= (+ 1 open-line) (line-number-at-pos (point)))
+            (progn (beginning-of-line) (delete-backward-char 1))
+          (previous-line)
+          (end-of-line)
 
-	  (if (looking-back "}[,;]?\\|][,;]?")
-	      (progn (next-line)
-		     (let ((close (point)) (line-text (delete-and-extract-region (line-beginning-position) (+ 1 (line-end-position)))))
-		       (previous-line)
-		       (end-of-line)
-		       (backward-list)
-		       (beginning-of-line)
-		       (let ((open (point)))
-			 (insert line-text)
-			 (indent-region open close))
-		       ))
-	    (forward-line)
-	    (transpose-lines 1)
-	    (previous-line 3)
-	    (when (looking-at ".*)\$")
-	      (forward-line)
-	      (transpose-lines 1)
-	      (forward-line))
+          (if (looking-back "}[,;]?\\|][,;]?")
+              (progn (next-line)
+                     (let ((close (point)) (line-text (delete-and-extract-region (line-beginning-position) (+ 1 (line-end-position)))))
+                       (previous-line)
+                       (end-of-line)
+                       (backward-list)
+                       (beginning-of-line)
+                       (let ((open (point)))
+                         (insert line-text)
+                         (indent-region open close))
+                       ))
+            (forward-line)
+            (transpose-lines 1)
+            (previous-line 3)
+            (when (looking-at ".*)\$")
+              (forward-line)
+              (transpose-lines 1)
+              (forward-line))
 
-	    (indent-region str (point))))))))
+            (indent-region str (point))))))))
 
 
 
@@ -171,14 +176,16 @@
 
 
 ;; (font-lock-add-keywords 'js2-mode '(("[^?]\\s-*\\(\\sw+\\)\\s-*:" 1 font-lock-function-name-face)))
+(font-lock-add-keywords 'js2-mode '(("\\([;()]\\)" 0 '(:foreground "#71685E") nil)))
 
+(font-lock-add-keywords 'js2-mode '(("\\.\\(prototype\\|undefined\\)" 0 font-lock-builtin-face)))
 
 
 ;; (font-lock-add-keywords 'js2-mode
 ;;   '(("\\_<\\([[:upper:]_]\\{2,\\}+\\)\\_>" . font-lock-function-name-face)))
 
 ;; (font-lock-add-keywords 'js2-mode
-;;    '(("\\_<\\(global\\|require\\|process\\|module\\|console\\|prototype\\)\\_>" . font-lock-builtin-face)))
+;;    '(("<\\(global\\|require\\|process\\|module\\|console\\|prototype\\)>" . font-lock-builtin-face)))
 
 
 ;; (add-hook 'js2-mode-hook
@@ -191,27 +198,17 @@
 ;; (add-to-list 'compilation-error-regexp-alist 'jshint)
 
 ;; compensate for mess with js2-mode highlighting and added keywords..
-;; (add-hook 'js2-mode-hook (lambda ()
-;;                            (run-with-idle-timer 1 t 'font-lock-fontify-buffer)))
+(add-hook 'js2-mode-hook (lambda ()
+                           (run-with-idle-timer 1 t 'font-lock-fontify-buffer)))
 
 (define-key js2-mode-map [down-mouse-1] #'js2-mode-show-node)
 (setq js2-mode-dev-mode-p t)
 
+(defun my-disable-indent-tabs-mode ()
+  (set-variable 'indent-tabs-mode nil)
+  (set-variable 'whitespace-indent-tabs-mode nil))
 
 ;; Nice comma leading list automacy
-(defun mm-line-leading-comma ()
-  (save-excursion
-    (back-to-indentation)
-    (looking-at ",")))
-
-(define-key js2-mode-map (kbd ",")
-  `(lambda ()
-     (interactive)
-     (if (mm-line-leading-comma)
-	 (newline))
-     (funcall 'self-insert-command 1)
-     (indent-according-to-mode)))
-
 (define-key js2-mode-map (kbd "SPC")
   `(lambda ()
      (interactive)
@@ -231,15 +228,11 @@
      (mm-remove-all-this-cruft-on-backward-delete)
      ))
 
-(defun my-disable-indent-tabs-mode ()
-  (set-variable 'indent-tabs-mode nil)
-  (set-variable 'whitespace-indent-tabs-mode nil))
-
 (define-key js2-mode-map (kbd ";")
   `(lambda ()
      (interactive)
      (if (looking-at ";")
-	 (forward-char)
+         (forward-char)
        (funcall 'self-insert-command 1))))
 
 (defun mm-remove-all-this-cruft-on-backward-delete ()
@@ -254,11 +247,11 @@
     `(lambda ()
        (interactive)
        (if (looking-at (regexp-quote ,open))
-	   (forward-char (length ,open))
-	 (funcall 'self-insert-command 1)
-	 (when (looking-at "\$\\|[\\ \\.\\,\\)\\;]")
-	   (insert ,close)
-	   (backward-char (+ (length ,close)))))
+           (forward-char (length ,open))
+         (funcall 'self-insert-command 1)
+         (when (looking-at "\$\\|[\\ \\.\\,\\)\\;]")
+           (insert ,close)
+           (backward-char (+ (length ,close)))))
        (mm-remove-all-this-cruft-on-backward-delete)
        ))
 
@@ -266,27 +259,130 @@
     `(lambda ()
        (interactive)
        (if (looking-at (regexp-quote ,close))
-	   (forward-char (length ,close))
-	 (funcall 'self-insert-command 1)))))
+           (forward-char (length ,close))
+         (funcall 'self-insert-command 1)))))
 
 (defun mm-setup-single (open)
   (define-key js2-mode-map (kbd open)
     `(lambda ()
        (interactive)
        (if (looking-at ,open)
-	   (forward-char (length ,open))
-	 (let ((str (nth 3 (syntax-ppss))))
-	   (funcall 'self-insert-command 1)
-	   (when (looking-at "\$\\|[\\ \\.\\,\\)\\;]")
-	     (unless str
-	       (insert ,open)
-	       (backward-char (+ (length ,open))))))))))
+           (forward-char (length ,open))
+         (let ((str (nth 3 (syntax-ppss))))
+           (funcall 'self-insert-command 1)
+           (when (looking-at "\$\\|[\\ \\.\\,\\)\\;]")
+             (unless str
+               (insert ,open)
+               (backward-char (+ (length ,open))))))))))
 
-(mm-setup-pair "(" ")")
-(mm-setup-pair "{" "}")
-(mm-setup-pair "[" "]")
-(mm-setup-single "'")
-(mm-setup-single "\"")
+;; (mm-setup-pair "(" ")")
+;; (mm-setup-pair "{" "}")
+;; (mm-setup-pair "[" "]")
+;; (mm-setup-single "'")
+;; (mm-setup-single "\"")
+
+
+;; Copied from https://github.com/magnars/.emacs.d/blob/master/settings/setup-js2-mode.el
+;; Set up wrapping of pairs, with the possiblity of semicolons thrown into the mix
+
+(defun js2r--setup-wrapping-pair (open close)
+
+  (let ((open open))
+    (define-key js2-mode-map (kbd open)
+      `(lambda ()
+         (interactive)
+         (js2r--self-insert-wrapping ,open ,close)))
+    (unless (string= open close)
+      (define-key js2-mode-map (kbd close)
+        `(lambda ()
+           (interactive)
+           (js2r--self-insert-closing ,open ,close))))))
+
+(define-key js2-mode-map (kbd ";")
+  (lambda ()
+    (interactive)
+    (if (looking-at ";")
+        (forward-char)
+      (funcall 'self-insert-command 1))))
+
+(defun js2r--self-insert-wrapping (open close)
+  (message open)
+  (cond
+   ((use-region-p)
+    (save-excursion
+      (let ((beg (region-beginning))
+            (end (region-end)))
+        (goto-char end)
+        (insert close)
+        (goto-char beg)
+        (insert open))))
+
+   ((and ;;(s-equals? open close)
+         ;;(looking-back (regexp-quote open))
+         (looking-at (regexp-quote close)))
+    (forward-char (length close)))
+
+   ((js2-mode-inside-comment-or-string)
+    (funcall 'self-insert-command 1))
+
+   (:else
+    (let ((end (js2r--something-to-close-statement)))
+      ;; (insert open close end)
+      ;; (backward-char (+ (length close) (length end)))
+      (insert open)
+      (when (looking-at "\$\\|[\\ \\.\\,\\)\\;]")
+        (insert close end)
+        (backward-char (+ (length close) (length end))))
+      (js2r--remove-all-this-cruft-on-backward-delete)))))
+
+(defun js2r--remove-all-this-cruft-on-backward-delete ()
+  (set-temporary-overlay-map
+   (let ((map (make-sparse-keymap)))
+     (define-key map (kbd "DEL") 'undo-tree-undo)
+     (define-key map (kbd "C-h") 'undo-tree-undo)
+     map) nil))
+
+(defun js2r--self-insert-closing (open close)
+  (if (and (looking-back (regexp-quote open))
+           (looking-at (regexp-quote close)))
+      (forward-char (length close))
+    (funcall 'self-insert-command 1)))
+
+(defun js2r--does-not-need-semi ()
+  (save-excursion
+    (back-to-indentation)
+    (or (looking-at "if ")
+        (looking-at "function ")
+        (looking-at "for ")
+        (looking-at "while ")
+        (looking-at "try ")
+        (looking-at "catch ")
+        (looking-at "else "))))
+
+(defun js2r--comma-unless (delimiter)
+  (if (looking-at (concat "[\n\t\r ]*" (regexp-quote delimiter)))
+      ""
+    ","))
+
+(defun js2r--something-to-close-statement ()
+  (cond
+   ((and (js2-block-node-p (js2-node-at-point)) (looking-at " *}")) ";")
+   ((not (eolp)) "")
+   ((js2-array-node-p (js2-node-at-point)) (js2r--comma-unless "]"))
+   ((js2-object-node-p (js2-node-at-point)) (js2r--comma-unless "}"))
+   ((js2-object-prop-node-p (js2-node-at-point)) (js2r--comma-unless "}"))
+   ((js2-call-node-p (js2-node-at-point)) (js2r--comma-unless ")"))
+   ((js2r--does-not-need-semi) "")
+   (:else ";")))
+
+(js2r--setup-wrapping-pair "(" ")")
+(js2r--setup-wrapping-pair "{" "}")
+(js2r--setup-wrapping-pair "[" "]")
+(js2r--setup-wrapping-pair "\"" "\"")
+(js2r--setup-wrapping-pair "'" "'")
+
+;;
+
 
 (defun fix-file ()
   (interactive)
@@ -311,5 +407,7 @@
   (beginning-of-buffer)
   (flycheck-buffer)
   )
+
+
 
 (provide 'setup-js-mode)

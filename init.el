@@ -74,6 +74,7 @@
      expand-region
      ido-ubiquitous
      js2-mode
+     json-mode
      tagedit
      multiple-cursors
      yasnippet
@@ -84,6 +85,7 @@
      tabbar
      flx
      flx-ido
+     zoom-frm
      ido-vertical-mode
      find-file-in-project
      highlight-escape-sequences)))
