@@ -3,10 +3,13 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        kill-region
+        kill-sexp
         yas-expand
         ))
 
 (setq mc/cmds-to-run-once
       '(
         ido-switch-buffer
+        tagedit-insert-gt
         ))

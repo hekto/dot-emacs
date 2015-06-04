@@ -13,9 +13,13 @@
  '(flycheck-checker-error-threshold nil)
  '(fringe-mode (quote (10 . 0)) nil (fringe))
  '(linum-format "%3d  ")
+ '(menu-bar-mode nil)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount (quote (1 ((shift) . 1) ((control)))))
- '(nav-width 15))
+ '(nav-width 15)
+ '(rainbow-identifiers-choose-face-function (quote rainbow-identifiers-cie-l*a*b*-choose-face))
+ '(rainbow-identifiers-cie-l*a*b*-lightness 75)
+ '(rainbow-identifiers-cie-l*a*b*-saturation 50))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

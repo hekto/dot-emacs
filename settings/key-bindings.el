@@ -22,6 +22,7 @@
 (global-set-key [?\C-c ?\C-g] 'goto-line)
 (global-set-key (kbd "C-c g") 'goto-line)
 (global-set-key (kbd "C-c i") 'indent-buffer)
+(global-set-key (kbd "C-c f") 'font-lock-fontify-buffer)
 
 ;;(global-set-key (kbd "C-x f") 'recentf-ido-find-file)
 (global-set-key (kbd "C-x f") 'find-file-in-project)
@@ -147,10 +148,13 @@
                      ((looking-at ")") (insert " "))))
               ((string= msg "space-in-brackets")
                (cond ((looking-at "\\[") (right-char) (insert " "))
-                     ((looking-at "]") (insert " "))))
-              ((string= msg "eqeqeq")
-               (cond ((looking-at "=") (insert "="))
-                     ((looking-at "!") (right-char) (insert "="))))))))
+                     ((looking-at "]") (insert " "))
+                     ((looking-at "{") (right-char) (insert " "))
+                     ((looking-at "}") (insert " "))))
+              ;; ((string= msg "eqeqeq")
+              ;;  (cond ((looking-at "=") (insert "="))
+              ;;        ((looking-at "!") (right-char) (insert "="))))
+              ))))
 
 
 

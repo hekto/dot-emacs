@@ -36,6 +36,8 @@
       `(("." . ,(expand-file-name
                  (concat user-emacs-directory "backups")))))
 
+;; no autosave files
+(setq auto-save-default nil)
 
 ;; Make backups of files, even when they're in version control
 (setq vc-make-backup-files t)
@@ -86,7 +88,7 @@
      flx
      flx-ido
      zoom-frm
-     ido-vertical-mode
+    ido-vertical-mode
      find-file-in-project
      highlight-escape-sequences)))
 
@@ -100,9 +102,9 @@
 (require 'sane-defaults)
 
 ;; Setup environment variables from the user's shell.
-(when is-mac
-  (require-package 'exec-path-from-shell)
-  (exec-path-from-shell-initialize))
+;; (when is-mac
+;;   (require-package 'exec-path-from-shell)
+;;   (exec-path-from-shell-initialize))
 
 
 ;; Setup extensions
@@ -224,7 +226,7 @@
 
 ;; Set up appearance early
 (require 'appearance)
-(menu-bar-mode t)
+(menu-bar-mode -1)
 
 ;; Setup key bindings
 (require 'key-bindings)
@@ -270,6 +272,9 @@
 
 ;;(desktop-save-mode 1)
 
+(global-anzu-mode +1)
+
+
 ;; for sr-speedbar:
 (defun ad-advised-definition-p (definition) "Return non-nil if DEFINITION was generated from advice information." (if (or (ad-lambda-p definition) (macrop definition) (ad-compiled-p definition)) (let ((docstring (ad-docstring definition))) (and (stringp docstring) (get-text-property 0 ‘dynamic-docstring-function docstring)))))
 
@@ -280,5 +285,5 @@
                       :inherit 'default
                       :height 100))
 
-(add-hook 'after-init-hook 'global-color-identifiers-mode)
-(setq color-identifiers:num-colors 50)
+;;(add-hook 'after-init-hook 'global-color-identifiers-mode)
+;;(setq color-identifiers:num-colors 50)

@@ -3,6 +3,11 @@
 (require 'js)
 (require 'js2-mode)
 ;;(require 'js2-indent)
+
+;; (add-to-list 'load-path (expand-file-name "tern/emacs" site-lisp-dir))
+;; (autoload 'tern-mode "tern.el" nil t)
+;; (require 'tern)
+
 (defun js2-mode-inside-comment-or-string ()
   "Return non-nil if inside a comment or string."
   (or
@@ -47,19 +52,29 @@
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
 
-(add-hook 'js2-mode-hook (lambda() (setq mode-name "js²")))
-(add-hook 'js-mode-hook (lambda() (setq mode-name "js")))
 (add-hook 'js-mode-hook 'js2-minor-mode)
-
-(add-hook 'js2-mode-hook (lambda() (set (make-local-variable 'indent-line-function) 'js-indent-line)))
-
-
-;;(setq-default flycheck-checker 'javascript-jscs)
-
+(add-hook 'js-mode-hook (lambda() (setq mode-name "js")))
 (add-hook 'js-mode-hook (lambda () (flycheck-mode 1)))
-(add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
 
 (add-hook 'js-mode-hook 'electric-indent-mode)
+(add-hook 'js2-mode-hook
+          (lambda()
+            (setq mode-name "js²")
+            (set (make-local-variable 'indent-line-function) 'js-indent-line)
+            (flycheck-mode 1)
+            ;;(run-with-idle-timer 1 t 'font-lock-fontify-buffer)
+            (rainbow-identifiers-mode)
+            (setq rainbow-identifiers-faces-to-override '(font-lock-type-face
+                                                          font-lock-variable-name-face
+                                                          font-lock-function-name-face))
+
+            ))
+;; (add-hook 'js2-mode-hook (lambda()
+;; (add-hook 'js2-mode-hook (lambda () ))
+;; (add-hook 'js2-mode-hook (lambda ()
+
+
+
 
 ;; js2-mode steals TAB, let's steal it back for yasnippet
 ;; (defun js2-tab-properly ()
@@ -198,8 +213,6 @@
 ;; (add-to-list 'compilation-error-regexp-alist 'jshint)
 
 ;; compensate for mess with js2-mode highlighting and added keywords..
-(add-hook 'js2-mode-hook (lambda ()
-                           (run-with-idle-timer 1 t 'font-lock-fontify-buffer)))
 
 (define-key js2-mode-map [down-mouse-1] #'js2-mode-show-node)
 (setq js2-mode-dev-mode-p t)
