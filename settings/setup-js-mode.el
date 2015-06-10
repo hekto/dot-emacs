@@ -50,7 +50,7 @@
 
 
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
 
 (add-hook 'js-mode-hook 'js2-minor-mode)
 (add-hook 'js-mode-hook (lambda() (setq mode-name "js")))
@@ -319,7 +319,6 @@
       (funcall 'self-insert-command 1))))
 
 (defun js2r--self-insert-wrapping (open close)
-  (message open)
   (cond
    ((use-region-p)
     (save-excursion
@@ -330,9 +329,9 @@
         (goto-char beg)
         (insert open))))
 
-   ((and ;;(s-equals? open close)
-         ;;(looking-back (regexp-quote open))
-         (looking-at (regexp-quote close)))
+   ((and (s-equals? open close)
+         (looking-back (regexp-quote open)))
+         ;;(looking-at (regexp-quote close)))
     (forward-char (length close)))
 
    ((js2-mode-inside-comment-or-string)
@@ -351,8 +350,8 @@
 (defun js2r--remove-all-this-cruft-on-backward-delete ()
   (set-temporary-overlay-map
    (let ((map (make-sparse-keymap)))
-     (define-key map (kbd "DEL") 'undo-tree-undo)
-     (define-key map (kbd "C-h") 'undo-tree-undo)
+     (define-key map (kbd "DEL") 'undo)
+     (define-key map (kbd "C-h") 'undo)
      map) nil))
 
 (defun js2r--self-insert-closing (open close)
@@ -362,15 +361,23 @@
     (funcall 'self-insert-command 1)))
 
 (defun js2r--does-not-need-semi ()
-  (save-excursion
-    (back-to-indentation)
-    (or (looking-at "if ")
-        (looking-at "function ")
-        (looking-at "for ")
-        (looking-at "while ")
-        (looking-at "try ")
-        (looking-at "catch ")
-        (looking-at "else "))))
+  (or (js2-if-node-p (js2-node-at-point))
+      ;;(js2-else-node-p (js2-node-at-point)) ;; else are treated as if-nodes in js2-mode
+      (js2-for-node-p (js2-node-at-point))
+      (js2-while-node-p (js2-node-at-point))
+      (js2-try-node-p (js2-node-at-point))
+      (js2-catch-node-p (js2-node-at-point))
+  ))
+
+  ;; (save-excursion
+  ;;   (back-to-indentation)
+  ;;   (or (looking-at "if ")
+  ;;       (looking-at "function")
+  ;;       (looking-at "for ")
+  ;;       (looking-at "while ")
+  ;;       (looking-at "try ")
+  ;;       (looking-at "catch ")
+  ;;       (looking-at "else "))))
 
 (defun js2r--comma-unless (delimiter)
   (if (looking-at (concat "[\n\t\r ]*" (regexp-quote delimiter)))
@@ -381,12 +388,20 @@
   (cond
    ((and (js2-block-node-p (js2-node-at-point)) (looking-at " *}")) ";")
    ((not (eolp)) "")
-   ((js2-array-node-p (js2-node-at-point)) (js2r--comma-unless "]"))
-   ((js2-object-node-p (js2-node-at-point)) (js2r--comma-unless "}"))
+   ((js2-array-node-p       (js2-node-at-point)) (js2r--comma-unless "]"))
+   ((js2-object-node-p      (js2-node-at-point)) (js2r--comma-unless "}"))
    ((js2-object-prop-node-p (js2-node-at-point)) (js2r--comma-unless "}"))
-   ((js2-call-node-p (js2-node-at-point)) (js2r--comma-unless ")"))
+   ((js2-call-node-p        (js2-node-at-point)) (js2r--comma-unless ")"))
+   ((and (js2-function-node-p (js2-node-at-point)) (js2-object-prop-node-p (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "}" ))
+   ((and (js2-function-node-p (js2-node-at-point)) (js2-array-node-p       (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "]" ))
    ((js2r--does-not-need-semi) "")
    (:else ";")))
+
+;; (defun wantsemi ()
+;;   (interactive)
+;;   (print (elt (js2-node-at-point) 0))
+;;   (print (elt (js2-node-parent (js2-node-at-point)) 0))
+;; )
 
 (js2r--setup-wrapping-pair "(" ")")
 (js2r--setup-wrapping-pair "{" "}")
