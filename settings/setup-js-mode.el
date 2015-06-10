@@ -367,6 +367,8 @@
       (js2-while-node-p (js2-node-at-point))
       (js2-try-node-p (js2-node-at-point))
       (js2-catch-node-p (js2-node-at-point))
+      (save-excursion (back-to-indentation)
+                      (looking-at "function"))
   ))
 
   ;; (save-excursion
