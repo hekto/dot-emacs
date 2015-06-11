@@ -330,8 +330,8 @@
         (insert open))))
 
    ((and (s-equals? open close)
-         (looking-back (regexp-quote open)))
-         ;;(looking-at (regexp-quote close)))
+         ;;(looking-back (regexp-quote open)))
+         (looking-at (regexp-quote close)))
     (forward-char (length close)))
 
    ((js2-mode-inside-comment-or-string)
@@ -365,6 +365,7 @@
       ;;(js2-else-node-p (js2-node-at-point)) ;; else are treated as if-nodes in js2-mode
       (js2-for-node-p (js2-node-at-point))
       (js2-while-node-p (js2-node-at-point))
+      (js2-switch-node-p (js2-node-at-point))
       (js2-try-node-p (js2-node-at-point))
       (js2-catch-node-p (js2-node-at-point))
       (save-excursion (back-to-indentation)
@@ -396,14 +397,15 @@
    ((js2-call-node-p        (js2-node-at-point)) (js2r--comma-unless ")"))
    ((and (js2-function-node-p (js2-node-at-point)) (js2-object-prop-node-p (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "}" ))
    ((and (js2-function-node-p (js2-node-at-point)) (js2-array-node-p       (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "]" ))
+;;   ((and (js2-function-node-p (js2-node-at-point)) (js2-var-init-node-p       (js2-node-parent (js2-node-at-point)))) "")
    ((js2r--does-not-need-semi) "")
    (:else ";")))
 
-;; (defun wantsemi ()
-;;   (interactive)
-;;   (print (elt (js2-node-at-point) 0))
-;;   (print (elt (js2-node-parent (js2-node-at-point)) 0))
-;; )
+(defun wantsemi ()
+  (interactive)
+  (print (elt (js2-node-at-point) 0))
+  (print (elt (js2-node-parent (js2-node-at-point)) 0))
+)
 
 (js2r--setup-wrapping-pair "(" ")")
 (js2r--setup-wrapping-pair "{" "}")
