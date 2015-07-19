@@ -1,6 +1,6 @@
 (message "Setting up js²")
 (require 's)
-(require 'js)
+;;(require 'js)
 (require 'js2-mode)
 ;;(require 'js2-indent)
 
@@ -53,11 +53,11 @@
 (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
 (add-to-list 'auto-mode-alist '("\\.eslintrc$" . json-mode))
 
-(add-hook 'js-mode-hook 'js2-minor-mode)
-(add-hook 'js-mode-hook (lambda() (setq mode-name "js")))
-(add-hook 'js-mode-hook (lambda () (flycheck-mode 1)))
+;; (add-hook 'js-mode-hook 'js2-minor-mode)
+;; (add-hook 'js-mode-hook (lambda() (setq mode-name "js")))
+;; (add-hook 'js-mode-hook (lambda () (flycheck-mode 1)))
+;; (add-hook 'js-mode-hook 'electric-indent-mode)
 
-(add-hook 'js-mode-hook 'electric-indent-mode)
 (add-hook 'js2-mode-hook
           (lambda()
             (setq mode-name "js²")
