@@ -51,6 +51,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
+(add-to-list 'auto-mode-alist '("\\.eslintrc$" . json-mode))
 
 (add-hook 'js-mode-hook 'js2-minor-mode)
 (add-hook 'js-mode-hook (lambda() (setq mode-name "js")))
@@ -63,10 +64,10 @@
             (set (make-local-variable 'indent-line-function) 'js-indent-line)
             (flycheck-mode 1)
             ;;(run-with-idle-timer 1 t 'font-lock-fontify-buffer)
-            (rainbow-identifiers-mode)
-            (setq rainbow-identifiers-faces-to-override '(font-lock-type-face
-                                                          font-lock-variable-name-face
-                                                          font-lock-function-name-face))
+            ;; (rainbow-identifiers-mode)
+            ;; (setq rainbow-identifiers-faces-to-override '(font-lock-type-face
+            ;;                                               font-lock-variable-name-face
+            ;;                                               font-lock-function-name-face))
 
             ))
 ;; (add-hook 'js2-mode-hook (lambda()

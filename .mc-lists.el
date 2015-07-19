@@ -3,8 +3,13 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        electric-newline-and-maybe-indent
         kill-region
         kill-sexp
+        tagedit-insert-dot
+        tagedit-insert-equal
+        tagedit-insert-lt
+        tagedit-kill
         yas-expand
         ))
 
