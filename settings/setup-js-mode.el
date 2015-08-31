@@ -62,11 +62,12 @@
             (setq mode-name "js²")
             (set (make-local-variable 'indent-line-function) 'js-indent-line)
             (flycheck-mode 1)
-            ;;(run-with-idle-timer 1 t 'font-lock-fontify-buffer)
-            (rainbow-identifiers-mode)
-            (setq rainbow-identifiers-faces-to-override '(font-lock-type-face
-                                                          font-lock-variable-name-face
-                                                          font-lock-function-name-face))
+            ;;(run-with-idle-timer 0.1 t 'font-lock-fontify-buffer)
+            ;;(rainbow-identifiers-mode)
+            ;;(color-identifiers-mode)
+            ;; (setq rainbow-identifiers-faces-to-override '(font-lock-type-face
+            ;;                                               font-lock-variable-name-face
+            ;;                                               font-lock-function-name-face))
 
             ))
 ;; (add-hook 'js2-mode-hook (lambda()
@@ -191,7 +192,9 @@
 
 
 ;; (font-lock-add-keywords 'js2-mode '(("[^?]\\s-*\\(\\sw+\\)\\s-*:" 1 font-lock-function-name-face)))
-(font-lock-add-keywords 'js2-mode '(("\\([;()]\\)" 0 '(:foreground "#71685E") nil)))
+;;(font-lock-add-keywords 'js2-mode '(("\\([;()]\\)" 0 '(:foreground "#71685E") nil)))
+(font-lock-add-keywords 'js2-mode '(("\\([;()]\\)" 0 '(:foreground "#8D867E"))))
+(font-lock-add-keywords 'js2-mode '(("\\([\{\}\\[\]\(\)]+\\)" 1 font-lock-keyword-face)))
 
 (font-lock-add-keywords 'js2-mode '(("\\.\\(prototype\\|undefined\\)" 0 font-lock-builtin-face)))
 
@@ -395,6 +398,7 @@
    ((js2-object-node-p      (js2-node-at-point)) (js2r--comma-unless "}"))
    ((js2-object-prop-node-p (js2-node-at-point)) (js2r--comma-unless "}"))
    ((js2-call-node-p        (js2-node-at-point)) (js2r--comma-unless ")"))
+   ((and (js2-var-init-node-p (js2-node-at-point)) (js2-var-decl-node-p (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "}" ))
    ((and (js2-function-node-p (js2-node-at-point)) (js2-object-prop-node-p (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "}" ))
    ((and (js2-function-node-p (js2-node-at-point)) (js2-array-node-p       (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "]" ))
 ;;   ((and (js2-function-node-p (js2-node-at-point)) (js2-var-init-node-p       (js2-node-parent (js2-node-at-point)))) "")

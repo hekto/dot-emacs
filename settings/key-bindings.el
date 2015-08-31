@@ -38,13 +38,15 @@
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 (global-set-key (kbd "C-s-0") (lambda () (interactive) (text-scale-set 0)))
+(global-set-key (kbd "<C-mouse-4>") 'text-scale-increase)
+(global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease)
 
 
 (defun align-= (p1 p2)
   "Align lines by ="
   (interactive "r")
   (align-regexp p1 p2 "\\(\\s-*\\)=" 1 1 nil)
-)
+  )
 
 (defun align-paragraph-= ()
   "Align paragraph by ="
@@ -52,13 +54,13 @@
   (save-excursion
     (mark-paragraph)
     (align-= (region-beginning) (region-end)))
-)
+  )
 
 (defun align-arg (p1 p2 c)
   "Align lines by <char>"
   (interactive "r")
   (align-regexp p1 p2 (concat "\\(\\s-*\\)" c) 1 1 nil)
-)
+  )
 
 (defun align-paragraph-arg (c)
   "Align paragraph by <char>"
@@ -66,7 +68,7 @@
   (save-excursion
     (unless mark-active (mark-paragraph))
     (align-arg (region-beginning) (region-end) c))
-)
+  )
 
 ;; todo: identify adjacent lines with " = " in them and set points and run em all... so i dont have to mark the block!
 ;; mark-paragraph with M-h
@@ -146,7 +148,10 @@
         (cond ((string= msg "space-in-parens")
                (cond ((looking-at "(") (right-char) (insert " "))
                      ((looking-at ")") (insert " "))))
-              ((string= msg "space-in-brackets")
+              ((string= msg "array-bracket-spacing")
+               (cond ((looking-at "\\[") (right-char) (insert " "))
+                     ((looking-at "]") (insert " "))))
+              ((string= msg "computed-property-spacing")
                (cond ((looking-at "\\[") (right-char) (insert " "))
                      ((looking-at "]") (insert " "))
                      ((looking-at "{") (right-char) (insert " "))
@@ -184,7 +189,7 @@
           (repeat-key-str (format-kbd-macro (vector repeat-key) nil)))
      ,@body
      (while repeat-key
-;       (message "(Type %s to repeat)" repeat-key-str)
+                                        ;       (message "(Type %s to repeat)" repeat-key-str)
        (let ((event (read-event)))
          (clear-this-command-keys t)
          (if (equal event repeat-key)
