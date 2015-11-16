@@ -108,7 +108,8 @@
 
 
 ;; Setup extensions
-(eval-after-load 'ido '(require 'setup-ido))
+;; (eval-after-load 'ido '(require 'setup-ido))
+(eval-after-load 'ivy '(require 'setup-ivy))
 (require 'setup-html-mode)
 (require 'setup-glsl-mode)
 (require 'setup-ffip)
