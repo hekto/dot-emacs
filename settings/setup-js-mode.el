@@ -392,6 +392,9 @@
     ","))
 
 (defun js2r--something-to-close-statement ()
+  ;; (print (elt (js2-node-at-point) 0))
+  ;; (print (elt (js2-node-parent (js2-node-at-point)) 0))
+
   (cond
    ((and (js2-block-node-p (js2-node-at-point)) (looking-at " *}")) ";")
    ((not (eolp)) "")
@@ -399,17 +402,24 @@
    ((js2-object-node-p      (js2-node-at-point)) (js2r--comma-unless "}"))
    ((js2-object-prop-node-p (js2-node-at-point)) (js2r--comma-unless "}"))
    ((js2-call-node-p        (js2-node-at-point)) (js2r--comma-unless ")"))
-   ((and (js2-var-init-node-p (js2-node-at-point)) (js2-var-decl-node-p (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "}" ))
+   ;; check next line if that is a name node... doesnt work with empty lines of course..
+   ((and (js2-var-init-node-p (js2-node-at-point)) (js2-name-node-p (save-excursion (forward-line) (back-to-indentation) (js2-node-at-point) ))) (js2r--comma-unless "}" ))
    ((and (js2-function-node-p (js2-node-at-point)) (js2-object-prop-node-p (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "}" ))
    ((and (js2-function-node-p (js2-node-at-point)) (js2-array-node-p       (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "]" ))
-;;   ((and (js2-function-node-p (js2-node-at-point)) (js2-var-init-node-p       (js2-node-parent (js2-node-at-point)))) "")
+   ((and (js2-function-node-p (js2-node-at-point)) (js2-var-init-node-p    (js2-node-parent (js2-node-at-point)))) (js2r--comma-unless "}" ))
    ((js2r--does-not-need-semi) "")
    (:else ";")))
 
 (defun wantsemi ()
   (interactive)
   (print (elt (js2-node-at-point) 0))
-  (print (elt (js2-node-parent (js2-node-at-point)) 0))
+  ;; (print (elt (js2-node-parent (js2-node-at-point)) 0))
+  (save-excursion
+    (forward-line)
+    (back-to-indentation)
+    (print (elt (js2-node-at-point) 0))
+    )
+
 )
 
 (js2r--setup-wrapping-pair "(" ")")
