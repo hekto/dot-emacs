@@ -369,6 +369,7 @@
       ;;(js2-else-node-p (js2-node-at-point)) ;; else are treated as if-nodes in js2-mode
       (js2-for-node-p (js2-node-at-point))
       (js2-while-node-p (js2-node-at-point))
+      (js2-class-node-p (js2-node-at-point))
       (js2-switch-node-p (js2-node-at-point))
       (js2-try-node-p (js2-node-at-point))
       (js2-catch-node-p (js2-node-at-point))
