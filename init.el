@@ -79,6 +79,7 @@
      json-mode
      tagedit
      multiple-cursors
+     anzu
      yasnippet
      s
      smex

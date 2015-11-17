@@ -34,6 +34,9 @@
 (global-set-key (kbd "M-\"") 'insert-pair)
 (global-set-key (kbd "M-'") 'insert-pair)
 (global-set-key (kbd "M-]") 'delete-pair)
+(global-set-key (kbd "C-x e") 'eval-buffer)
+
+(global-set-key (kbd "C-s") 'swiper)
 
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)

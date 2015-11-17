@@ -29,14 +29,17 @@
         (move-beginning-of-line 1)
       (goto-char position))))
 
-(define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
-(define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
+;; (define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
+;; (define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
 
 ;; No dropdowns please, yas
-(setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
+;; (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
 
 ;; No need to be so verbose
 (setq yas-verbosity 1)
+
+;; only expand for recently typed keywords
+(setq yas-expand-only-for-last-commands '(self-insert-command))
 
 ;; Wrap around region
 (setq yas-wrap-around-region t)
