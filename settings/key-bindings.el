@@ -36,7 +36,8 @@
 (global-set-key (kbd "M-]") 'delete-pair)
 (global-set-key (kbd "C-x e") 'eval-buffer)
 
-(global-set-key (kbd "C-s") 'swiper)
+(global-set-key (kbd "C-S-s") 'swiper)
+;; (global-set-key (kbd "C-s") 'isearch-forward)
 
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
@@ -158,6 +159,11 @@
                (cond ((looking-at "\\[") (right-char) (insert " "))
                      ((looking-at "]") (insert " "))
                      ((looking-at "{") (right-char) (insert " "))
+                     ((looking-at "}") (insert " "))))
+              ((string= msg "object-curly-spacing")
+               (cond ((looking-at "\\[") (right-char) (insert " "))
+                     ((looking-at "]") (insert " "))
+                     ((looking-back "{") (insert " "))
                      ((looking-at "}") (insert " "))))
               ;; ((string= msg "eqeqeq")
               ;;  (cond ((looking-at "=") (insert "="))
