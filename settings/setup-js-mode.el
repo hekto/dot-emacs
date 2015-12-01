@@ -434,26 +434,8 @@
 
 (defun fix-file ()
   (interactive)
-  (beginning-of-buffer)
-  (replace-string "\"use strict\"" "'use strict'")
-  ;; (beginning-of-buffer)
-  ;; (replace-regexp "\\(;\\)$" "")
-  ;; (beginning-of-buffer)
-;;  (query-replace ";" "")
-  ;; (beginning-of-buffer)
-  ;; (query-replace-regexp "(\\([^) ]\\)" "( \\1")
-  ;; (beginning-of-buffer)
-  ;; (query-replace-regexp "\\([^( ]\\))" "\\1 )")
-
-  ;; (beginning-of-buffer)
-  ;; (replace-regexp ",\n\\( *\\)" "\n\\1, ")
-
-  (whitespace-cleanup-region (point-min) (point-max))
-  (indent-buffer)
-  (beginning-of-buffer)
-  (whitespace-cleanup)
-  (beginning-of-buffer)
-  (flycheck-buffer)
+  (shell-command (format "eslint --fix %s > /dev/null" (shell-quote-argument buffer-file-name)))
+  (revert-buffer t t)
   )
 
 
