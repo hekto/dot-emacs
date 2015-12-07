@@ -9,8 +9,8 @@
 ;; JavaScript
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.jshintrc$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
+(add-to-list 'auto-mode-alist '("\\.eslintrc$" . json-mode))
 
 ;; Snippets
 (add-to-list 'auto-mode-alist '("yasnippet/snippets" . snippet-mode))
