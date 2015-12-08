@@ -20,8 +20,7 @@
 (show-paren-mode 1)
 
 (defun get-default-height ()
-  (/ (- (display-pixel-height) 60)
-     (frame-char-height)))
+  (- (/ (display-pixel-height) (frame-char-height)) 3))
 
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))

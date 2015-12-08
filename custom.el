@@ -36,7 +36,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#2A211C" :foreground "#BDAE9D" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 141 :width normal :foundry "unknown" :family "Ubuntu Mono"))))
+ '(company-preview-common ((t (:foreground "#666"))))
+ '(company-scrollbar-bg ((t (:inherit company-tooltip :background "#999"))))
+ '(company-scrollbar-fg ((t (:background "#fff"))))
+ '(company-tooltip ((t (:background "#ccc" :foreground "black"))))
+ '(company-tooltip-common ((t (:inherit company-tooltip :foreground "#060"))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :foreground "#090"))))
+ '(company-tooltip-selection ((t (:inherit company-tooltip :background "#eee"))))
  '(diff-hl-change ((t (:background "#66f" :foreground "#000"))))
  '(diff-hl-delete ((t (:inherit diff-removed :background "#933" :foreground "#000"))))
  '(diff-hl-insert ((t (:inherit diff-added :background "#393" :foreground "#000"))))

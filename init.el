@@ -91,6 +91,8 @@
      tabbar
      flx
      flx-ido
+     company
+     company-tern
      zoom-frm
     ido-vertical-mode
      find-file-in-project
