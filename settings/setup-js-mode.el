@@ -8,6 +8,33 @@
 ;; (autoload 'tern-mode "tern.el" nil t)
 ;; (require 'tern)
 
+;; (autoload 'tern-mode "tern.el" nil t)
+;; (require 'tern)
+;; (tern-mode)
+;; (company-mode)
+;; ;;(require 'company-tern)
+;; (use-package company-tern
+;;           :init
+;;           (add-to-list 'company-backends 'company-tern))))
+(if (fboundp 'with-eval-after-load)
+    (defmacro after (feature &rest body)
+      "After FEATURE is loaded, evaluate BODY."
+      (declare (indent defun))
+      `(with-eval-after-load ,feature ,@body))
+  (defmacro after (feature &rest body)
+    "After FEATURE is loaded, evaluate BODY."
+    (declare (indent defun))
+    `(eval-after-load ,feature
+       '(progn ,@body))))
+
+(require-package 'tern)
+(add-hook 'js2-mode-hook 'tern-mode)
+(add-hook 'js2-mode-hook 'company-mode)
+(after 'tern
+       (after 'company-mode
+              (require-package 'company-tern)))
+
+
 (defun js2-mode-inside-comment-or-string ()
   "Return non-nil if inside a comment or string."
   (or
