@@ -4,9 +4,15 @@
 (require 'js2-mode)
 ;;(require 'js2-indent)
 
-;; (add-to-list 'load-path (expand-file-name "tern/emacs" site-lisp-dir))
-;; (autoload 'tern-mode "tern.el" nil t)
-;; (require 'tern)
+
+(require-package 'tern)
+(add-hook 'js2-mode-hook 'tern-mode)
+(add-hook 'js2-mode-hook 'company-mode)
+
+(after 'tern
+       (after 'company-mode
+              (require-package 'company-tern)))
+
 
 (defun js2-mode-inside-comment-or-string ()
   "Return non-nil if inside a comment or string."
